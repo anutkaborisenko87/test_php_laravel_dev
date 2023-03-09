@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateLotRequest;
 use App\Models\Lot;
 use App\Models\NewAuctionPrice;
 use Illuminate\Http\Request;
@@ -25,5 +26,47 @@ class LotController extends Controller
         }
         return response()->json(['data' => 'new price written']);
 
+    }
+
+    public function store(CreateLotRequest $request)
+    {
+        $data = $request->validated();
+        $newLot = Lot::create([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'start_price'=> $data['start_price'],
+            'user_id' => auth()->user()->id
+        ]);
+        foreach($data['categories'] as $category) {
+            $newLot->categories()->attach($category);
+        }
+        return redirect()->route('dashboard.index')->with('success', 'Lot created successfully');
+    }
+
+    public function update(CreateLotRequest $request, Lot $lot)
+    {
+        $data = $request->validated();
+        $lot->title = $data['title'];
+        $lot->description = $data['description'];
+        $lot->start_price = $data['start_price'];
+        $lot->save();
+        $lotCategories = $lot->categories->pluck('id')->toArray();
+        foreach ($lotCategories as $lotCat) {
+            if (!in_array($lotCat, $data['categories'])) {
+                $lot->categories()->detach([$lotCat]);
+            }
+        }
+        foreach ($data['categories'] as $category) {
+            if (!in_array($category, $lotCategories)) {
+                $lot->categories()->attach($category);
+            }
+        }
+        return redirect()->route('dashboard.index')->with('success', 'Lot updated successfully');
+    }
+
+    public function destroy(Lot $lot)
+    {
+        $lot->delete();
+        return redirect()->route('dashboard.index')->with('success', 'Lot deleted successfully');
     }
 }

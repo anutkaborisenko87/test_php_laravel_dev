@@ -14,13 +14,15 @@ class Lot extends Model
     use HasFactory;
 
     protected $fillable = [
-      'title',
-      'description',
-      'start_price',
-      'auction_price',
-      'auction_price',
-      'sold',
-      'auction_active',
+        'title',
+        'description',
+        'start_price',
+        'auction_price',
+        'auction_price',
+        'sold',
+        'auction_active',
+        'user_id'
+
     ];
 
     public function user(): BelongsTo
