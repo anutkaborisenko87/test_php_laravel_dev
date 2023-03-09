@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateLotRequest extends FormRequest
+class CreateCategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,9 @@ class CreateLotRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:4|max:20',
-            'description' => 'required|string|min:10|max:255',
-            'categories' => 'required|array',
-            'start_price' => 'required|numeric'
+            'title' => 'required|string|unique:categories,title|min:5|max:25',
+            'description' => 'required|string|min:10|max:250',
+            'lots' => 'sometimes|array'
         ];
     }
 }
