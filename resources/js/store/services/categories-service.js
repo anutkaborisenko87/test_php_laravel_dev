@@ -11,7 +11,7 @@ function getCategoriesList() {
 function getCategoriesLots(params) {
     return axios.post('/api/getCategoriesLots', params).then((response) => {
         return {
-            categoriesLots: response.data
+            categoriesLots: response.data.data
         };
     });
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\NewAuctionPrice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class Lot extends Model
 {
@@ -29,5 +31,13 @@ class Lot extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function scopeLastAuctionPriceUser()
+    {
+        if (!is_null($this->auction_price)) {
+            return NewAuctionPrice::where('lot_id', $this->id)->first()->user;
+        }
+        return $this->auction_price;
     }
 }

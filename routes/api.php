@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/getCategoriesList', [CategoryController::class, 'indexApi']);
 Route::post('/getCategoriesLots', [CategoryController::class, 'getCategoriesLots']);
+Route::post('/newLotPrice/{lot_id}', [LotController::class, 'setNewPrice']);
